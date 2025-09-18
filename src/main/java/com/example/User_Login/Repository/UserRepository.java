@@ -1,7 +1,6 @@
 package com.example.User_Login.Repository;
 
 import com.example.User_Login.Model.User;
-import com.example.User_Login.Model.UserSite;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,6 +15,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     List<User> findByFirstNameLike(@Param("keyword") String keyword);
 
     Object findByEmail(String email);
-
 
 }
