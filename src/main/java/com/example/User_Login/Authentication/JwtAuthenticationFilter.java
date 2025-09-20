@@ -23,8 +23,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain) throws ServletException, IOException {
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
 
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
@@ -53,6 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
         } catch (JwtException | IllegalArgumentException e) {
+            // Invalid token
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("Invalid or expired JWT token");
             return;
@@ -67,6 +68,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // validation for
         String path = request.getServletPath();
         // For example, exclude /auth/** endpoints or /login, /register, etc.
-        return path.startsWith("/auth") || path.equals("/your-jwt-util-endpoint");
+        return path.startsWith("/notification") || path.equals("/user/authenticate/login");
     }
 }

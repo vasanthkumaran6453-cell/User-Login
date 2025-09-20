@@ -8,8 +8,11 @@ import com.example.User_Login.ResponseDTO.UserLoginResponseDTO;
 import com.example.User_Login.Service.JwtUtilService;
 import com.example.User_Login.Service.UserAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import java.net.http.HttpHeaders;
 import java.util.List;
 
 @Service
@@ -20,6 +23,11 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
     private JwtUtilService jwtUtilService;
     @Autowired
     private UserSiteRepository userSiteRepository;
+    @Autowired
+    private RestTemplate restTemplate;
+    @Value("${notification.service.url}")
+    private String notificationServiceUrl;
+
 
     @Override
     public UserLoginResponseDTO userLogin(String userEmail, String userPassword) {
@@ -31,6 +39,10 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
          if(user.getPassword().equals(userPassword)) {
 
              String token = jwtUtilService.generateToken(user.getEmail());
+
+             String url = notificationServiceUrl +   "/email?email=" + user.getEmail();
+
+             String response = restTemplate.getForObject(url, String.class);
 
              return new UserLoginResponseDTO(
                      user.getId(),
